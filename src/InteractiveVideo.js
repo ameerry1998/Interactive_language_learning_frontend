@@ -4,7 +4,7 @@ import axios from 'axios';
 import RecordRTC from 'recordrtc';
 
 const InteractiveVideo = () => {
-    const API_URL = process.env.REACT_APP_API_URL;
+    const API_URL = process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL.replace(/\/$/, '') : 'http://localhost:5000';
     const videoRef = useRef(null);
     const recorderRef = useRef(null);
     const [isPaused, setIsPaused] = useState(false);
