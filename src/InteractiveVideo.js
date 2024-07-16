@@ -4,6 +4,7 @@ import axios from 'axios';
 import RecordRTC from 'recordrtc';
 
 const InteractiveVideo = () => {
+    const API_URL = process.env.REACT_APP_API_URL;
     const videoRef = useRef(null);
     const recorderRef = useRef(null);
     const [isPaused, setIsPaused] = useState(false);
@@ -51,7 +52,7 @@ const InteractiveVideo = () => {
 
         try {
             console.log('sending response to backend');
-            const response = await axios.post('http://localhost:5000/api/process-speech', formData, {
+            const response = await axios.post(`${API_URL}/api/process-speech`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -61,8 +62,8 @@ const InteractiveVideo = () => {
             setFeedbackAudio(feedbackAudio);
 
             if (nextVideo) {
-                console.log('Next video URL:', `http://localhost:5000${nextVideo.url}`);
-                videoRef.current.src = `http://localhost:5000${nextVideo.url}`;
+                console.log('Next video URL:', `${API_URL}${nextVideo.url}`);
+                videoRef.current.src = `${API_URL}${nextVideo.url}`;
 
                 videoRef.current.addEventListener('loadeddata', () => {
                     videoRef.current.play();
@@ -82,13 +83,13 @@ const InteractiveVideo = () => {
     useEffect(() => {
         const loadInitialVideo = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/current-video', {
+                const response = await axios.get(`${API_URL}/api/current-video`, {
                     params: { videoId: currentVideoId },
                 });
                 console.log('videos.js response', response);
                 const initialVideo = response.data;
-                console.log(`the video url is: http://localhost:5000${initialVideo.url}`);
-                videoRef.current.src = `http://localhost:5000${initialVideo.url}`;
+                console.log(`the video url is: ${API_URL}${initialVideo.url}`);
+                videoRef.current.src = `${API_URL}${initialVideo.url}`;
             } catch (error) {
                 console.error('Error loading initial video:', error);
             }
@@ -182,7 +183,7 @@ const InteractiveVideo = () => {
         console.log('Submitting voice chat input:', input);
         try {
             setIsPlaying(true);
-            const response = await axios.post('http://localhost:5000/api/voice-chat', {
+            const response = await axios.post(`${API_URL}/api/voice-chat`, {
                 transcript: input
             });
             console.log('Received voice chat response:', response.data);
