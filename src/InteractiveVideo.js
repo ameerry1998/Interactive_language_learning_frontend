@@ -245,7 +245,7 @@ const InteractiveVideo = () => {
                         Transcript: {transcript}
                     </Typography>
                     {voiceChatResponse && (
-                        <Box mt={2>
+                        <Box mt={2}>
                             <Typography variant="h6">Response:</Typography>
                             <Typography variant="body1">{voiceChatResponse}</Typography>
                         </Box>
