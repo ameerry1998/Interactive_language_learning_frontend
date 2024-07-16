@@ -4,7 +4,7 @@ import axios from 'axios';
 import RecordRTC from 'recordrtc';
 
 const InteractiveVideo = () => {
-    const API_URL = process.env.REACT_APP_API_URL;
+    const API_URL = process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL.replace(/\/$/, '') : 'http://localhost:5000';
     const videoRef = useRef(null);
     const recorderRef = useRef(null);
     const [isPaused, setIsPaused] = useState(false);
@@ -15,6 +15,10 @@ const InteractiveVideo = () => {
     const [voiceChatResponse, setVoiceChatResponse] = useState('');
     const [isListening, setIsListening] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
+
+    useEffect(() => {
+        console.log('API_URL:', API_URL);
+    }, []);
 
     useEffect(() => {
         console.log('Voice chat mode:', voiceChatMode);
@@ -76,7 +80,7 @@ const InteractiveVideo = () => {
                 audio.play();
             }
         } catch (error) {
-            console.error('Error processing speech:', error);
+            console.error('Error processing speech:', error.response?.data || error.message);
         }
     };
 
@@ -91,7 +95,7 @@ const InteractiveVideo = () => {
                 console.log(`the video url is: ${API_URL}${initialVideo.url}`);
                 videoRef.current.src = `${API_URL}${initialVideo.url}`;
             } catch (error) {
-                console.error('Error loading initial video:', error);
+                console.error('Error loading initial video:', error.response?.data || error.message);
             }
         };
 
@@ -194,7 +198,7 @@ const InteractiveVideo = () => {
             };
             audio.play();
         } catch (error) {
-            console.error('Error in voice chat:', error);
+            console.error('Error in voice chat:', error.response?.data || error.message);
             setIsPlaying(false);
         }
     };
